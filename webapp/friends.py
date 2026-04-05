@@ -1,12 +1,19 @@
+import os
+from pathlib import Path
+
+from dotenv import load_dotenv
 from flask import Blueprint, request, jsonify, session, render_template, redirect, url_for
 from supabase import create_client, Client
-import os
 from datetime import datetime
+
+_webapp_dir = Path(__file__).resolve().parent
+load_dotenv(_webapp_dir.parent / ".env")
+load_dotenv(_webapp_dir / ".env")
 
 bp = Blueprint('friends', __name__)
 
-supabase_url = os.getenv('SUPABASE_URL')
-supabase_key = os.getenv('SUPABASE_ANON_KEY')
+supabase_url = os.getenv("SUPABASE_URL")
+supabase_key = os.getenv("SUPABASE_ANON_KEY") or os.getenv("SUPABASE_KEY")
 supabase: Client = create_client(supabase_url, supabase_key)
 
 @bp.route('/friends', methods=['GET'])

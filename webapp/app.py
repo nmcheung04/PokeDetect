@@ -1,7 +1,14 @@
+import os
+from dotenv import load_dotenv
+
+# Load before friends (reads SUPABASE_* at import time). Repo .env lives next to /webapp.
+_webapp_dir = os.path.dirname(os.path.abspath(__file__))
+load_dotenv(os.path.join(_webapp_dir, "..", ".env"))
+load_dotenv(os.path.join(_webapp_dir, ".env"))
+
 from flask import Flask, request, jsonify, render_template, session, redirect, url_for
 from flask_cors import CORS
 from supabase import create_client, Client
-import os
 import cv2
 import numpy as np
 import imagehash
@@ -9,7 +16,6 @@ import pickle
 import time
 from PIL import Image
 import requests
-from dotenv import load_dotenv
 import base64
 import io
 import uuid
@@ -23,8 +29,6 @@ import warnings
 
 # Suppress multiprocessing resource tracker warnings
 warnings.filterwarnings("ignore", message="resource_tracker: There appear to be.*leaked semaphore objects")
-
-load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.getenv('FLASK_SECRET_KEY', 'your-secret-key-here')
